@@ -15,8 +15,8 @@ const removeBtn = document.getElementById("remove");
     removeBtn.addEventListener('click', function(event){
 
     
-      files = openFolder();
-      
+      files = openFolder('txt');
+
       console.log(files)
       fs.unlink(files[0], (err) => {
         if(err){
@@ -29,10 +29,10 @@ const removeBtn = document.getElementById("remove");
   })
 
 
-function openFolder() {
+function openFolder(extension) {
   return dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
-    filters: [{name: 'dirClean', extensions: ['txt','JOB','RAW','survey']}]
+    filters: [{name: 'dirClean', extensions: [extension]}]
   });
 
 

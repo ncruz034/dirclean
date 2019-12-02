@@ -42,7 +42,7 @@ function createWindow () {
         label:'Open Folder',
         accelerator: 'CmdOrCtrl+O',
         click(){
-          openFolder();
+          openFolder('txt');
         }
       },
      {
@@ -82,11 +82,11 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-function openFolder() {
+function openFolder(extension) {
   dialog.showOpenDialog()
 files = dialog.showOpenDialog(mainWindow, {
   properties: ['openFile'],
-  filters: [{name: 'dirClean', extensions: ['txt','JOB','RAW','survey']}]
+  filters: [{name: 'dirClean', extensions: [extension]}]
  });
 
  if (!files) return
