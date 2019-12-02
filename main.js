@@ -3,7 +3,7 @@ const {app, BrowserWindow, dialog, Menu} = require('electron')
 const path = require('path')
 const fs = require('fs')
 const debug = require('debug')
-
+let files = [];
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -15,7 +15,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
     }
   })
 
@@ -82,38 +83,38 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 
 function openFolder() {
-  
-const files = dialog.showOpenDialog(mainWindow, {
+  dialog.showOpenDialog()
+files = dialog.showOpenDialog(mainWindow, {
   properties: ['openFile'],
   filters: [{name: 'dirClean', extensions: ['txt','JOB','RAW','survey']}]
  });
 
  if (!files) return
-//removeFiles(files)
 
-fs.open('C:/Code/electron/18 JOBS/G28518A/G28518A.txt','r', (err, fd) => {
-  if (err) {
-    if (err.code === 'ENOENT') {
-      console.error('myfile does not exist');
-      return;
+
+ removeFiles(files);
+
+}
+
+
+
+
+function openFiles(){
+  fs.open(files[0],'r', (err, fd) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        console.error('myfile does not exist');
+        return;
+      }
+      throw err;
     }
-    throw err;
-  }
-  console.log(fd);
-});
-
-
-
-
-
- //file = files[0];
- //fileContent = fs.readFileSync(file).toString();
-//console.log(fileContent);
+    console.log(fd);
+  });
 }
 
 function removeFiles(files) {
-  if(files) return
-
+  if(!files) return
+console.log(files)
   try {
     files.forEach(file => {
       fs.unlink(file, (err) => {
