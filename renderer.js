@@ -13,34 +13,43 @@ const {mainWindow, dialog} = require('electron').remote;
 
 const openBtn = document.getElementById("openFiles");
 const cleanBtn = document.getElementById("cleanDirectory");
-const extensions = document.getElementById("extensions")
+const extension = document.getElementById("extensions")
 let filePath='';
-
+let extensions = [];
 
 
 openBtn.addEventListener('click', function(event){
-      filePath = openFolder(extensions.value);
+      filePath = openFolder(extension.value);
       if (filePath) document.getElementById("cleanDirectory").disabled = false;
 })
 
 cleanBtn.addEventListener('click', function(event){
-
-  filewalker("E:/electron/FilesToErace", function(err, data){
+let thePath = path.resolve(filePath.toString());
+ 
+  filewalker(thePath, function(err, data){
+   
     if(err){
+      alert('Errors where encountered while removing the files!');
         throw err;
     }
-    
-    // ["c://some-existent-path/file.txt","c:/some-existent-path/subfolder"]
+    alert('Files successfully removed!');
     console.log(data);
   });
+
+  //The find-remove library is not working.
   //removeFileRecursive(filePath)
 })
 
 function openFolder(extension) {
-  const ext = extension.split(',')
+  if(!extension) {
+    alert('File extensions are required!');
+    return;
+  }
+  extensions = extension.split(',')
+
   return dialog.showOpenDialogSync(mainWindow, {
     properties: ['openDirectory'],
-    filters: [{name: 'dirClean', extensions: ext}]
+    filters: [{name: 'dirClean', extensions: extensions}]
   });
 }
 
@@ -94,14 +103,16 @@ function filewalker(dir, done) {
                       if (!--pending) done(null, results);
                   });
               } else {
-                  if( file.includes('.gif')) {
+               
+                extensions.forEach(function(extension){
+                  if( file.includes(extension)) {
                     results.push(file);
 
                     fs.unlink(file, (err) => {
                       if (err){return}
                     })
                   }
-
+                })
                   if (!--pending) done(null, results);
               }
           });

@@ -5,6 +5,10 @@ const fs = require('fs')
 const debug = require('debug')
 let files = [];
 
+//Set enviroment
+process.env.NODE_ENV = 'production';
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -12,8 +16,8 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 200,
+    width: 500,
+    height: 300,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true
@@ -26,8 +30,6 @@ function createWindow () {
   // Open the DevTools.
     //mainWindow.webContents.openDevTools()
   
-  
-
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
