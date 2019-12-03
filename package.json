@@ -21,7 +21,8 @@
   "devDependencies": {
     "electron": "^7.1.2",
     "electron-builder": "^21.2.0",
-    "electron-packager": "^14.1.1"
+    "electron-packager": "^14.1.1",
+    "electron-rebuild": "^1.8.8"
   },
   "dependencies": {
     "find-remove": "^2.0.0"
@@ -30,7 +31,7 @@
     "appId": "com.dirclean.app",
     "productName": "Directory Cleaner",
     "target": "NSIS",
-    "nsis":{
+    "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false
     }
