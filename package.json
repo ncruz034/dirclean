@@ -18,5 +18,8 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^7.1.2"
+  },
+  "dependencies": {
+    "find-remove": "^2.0.0"
   }
 }

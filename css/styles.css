@@ -1,0 +1,34 @@
+
+
+input {
+    border:0px;
+    border-bottom: solid 1px rgb(35, 19, 51);
+    background-color: rgb(95, 52, 136);
+}
+body {
+    display: block;
+    align-items: center;
+    background-color: rgb(95, 52, 136);
+}
+div {
+    width:100px;
+    display:grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    display: flex;
+}
+
+#openFiles {
+    cursor: pointer;
+    background-color: rgb(197, 247, 123);
+    border:0px;
+    padding: 5px;
+    margin: 5px;
+}
+#cleanDirectory {
+    cursor: pointer;
+    background-color: rgb(250, 54, 152);
+    border:0px;
+    padding: 5px;
+    margin: 5px;
+}

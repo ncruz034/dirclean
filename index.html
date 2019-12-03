@@ -5,12 +5,19 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link href="css/styles.css" rel="stylesheet">
     <title>DirClean!</title>
   </head>
   <body>
-    <h1>Hello!</h1>
-   
-    <button id="remove">Remove</button>
+    <p>Enter file extension separated by ',' [txt,doc,html]</p>
+    <div>
+      <input id="extensions"></body>
+      
+    </div>
+    <div>
+      <button id="openFiles">Open</button>
+      <button id="cleanDirectory">Clean</button>
+    </div>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>

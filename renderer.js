@@ -6,70 +6,105 @@
 // process.
 
 const fs = require('fs');
+const path = require('path');
+var findRemoveSync = require('find-remove');
 const {mainWindow, dialog} = require('electron').remote;
 //const { ipcRenderer, BrowserWindow, dialog } = require('electron');
 
-const removeBtn = document.getElementById("remove");
+const openBtn = document.getElementById("openFiles");
+const cleanBtn = document.getElementById("cleanDirectory");
+const extensions = document.getElementById("extensions")
+let filePath='';
 
- 
-    removeBtn.addEventListener('click', function(event){
 
+
+openBtn.addEventListener('click', function(event){
+      filePath = openFolder(extensions.value);
+      if (filePath) document.getElementById("cleanDirectory").disabled = false;
+})
+
+cleanBtn.addEventListener('click', function(event){
+
+  filewalker("E:/electron/FilesToErace", function(err, data){
+    if(err){
+        throw err;
+    }
     
-      files = openFolder('txt');
-
-      console.log(files)
-      fs.unlink(files[0], (err) => {
-        if(err){
-          console.log("Cannot delete file", err);
-          return;
-        }
-        alert("File succesfully deleted !");
-      });
-
-  })
-
+    // ["c://some-existent-path/file.txt","c:/some-existent-path/subfolder"]
+    console.log(data);
+  });
+  //removeFileRecursive(filePath)
+})
 
 function openFolder(extension) {
-  return dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile'],
-    filters: [{name: 'dirClean', extensions: [extension]}]
+  const ext = extension.split(',')
+  return dialog.showOpenDialogSync(mainWindow, {
+    properties: ['openDirectory'],
+    filters: [{name: 'dirClean', extensions: ext}]
   });
-
-
- //removeFiles(files)
-
-/*
-fs.open(files[0],'r', (err, fd) => {
-  if (err) {
-    if (err.code === 'ENOENT') {
-      console.error('myfile does not exist');
-      return;
-    }
-    throw err;
-  }
-  console.log(fd);
-});
-*/
-
-
-
-
- //file = files[0];
- //fileContent = fs.readFileSync(file).toString();
-//console.log(fileContent);
 }
 
 function removeFiles(files) {
   if(!files) return
 
-console.log(files)
+  let filesCount = files.length
+
   try {
     files.forEach(file => {
       fs.unlink(file, (err) => {
         if (err){return}
       })})
-
+      console.log(filesCount)
+      alert(`${filesCount} Files successfully deleted!`)
   } catch(err) {
+    alert('Unable to remove selected files',err)
     return
   }
 }
+
+function removeFileRecursive(path){
+  console.log(path)
+  var result = findRemoveSync('E:/electron/FilesToErace', {extensions: ['gif','log']})
+  console.log(result);
+}
+
+//https://solvit.io/53b9763
+
+function filewalker(dir, done) {
+  let results = [];
+
+  fs.readdir(dir, function(err, list) {
+      if (err) return done(err);
+
+      var pending = list.length;
+
+      if (!pending) return done(null, results);
+
+      list.forEach(function(file){
+          file = path.resolve(dir, file);
+
+          fs.stat(file, function(err, stat){
+              // If directory, execute a recursive call
+              if (stat && stat.isDirectory()) {
+                  // Add directory to array [comment if you need to remove the directories from the array]
+                  results.push(file);
+
+                  filewalker(file, function(err, res){
+                      results = results.concat(res);
+                      if (!--pending) done(null, results);
+                  });
+              } else {
+                  if( file.includes('.gif')) {
+                    results.push(file);
+
+                    fs.unlink(file, (err) => {
+                      if (err){return}
+                    })
+                  }
+
+                  if (!--pending) done(null, results);
+              }
+          });
+      });
+  });
+};

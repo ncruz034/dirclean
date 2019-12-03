@@ -12,8 +12,8 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 200,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true
@@ -38,24 +38,18 @@ function createWindow () {
   var menu = Menu.buildFromTemplate([{
     label:'Menu',
     submenu:[
-      {
-        label:'Open Folder',
-        accelerator: 'CmdOrCtrl+O',
-        click(){
-          openFolder('txt');
-        }
-      },
-     {
-       label:'Exit',
-       click(){
-      }
-     },
      {
       label:'Dev Tools',
       click(){
         mainWindow.webContents.openDevTools();
       }
-    }
+    },
+    {
+      label:'Exit',
+      click(){
+        app.quit();
+      }
+    },
     ]
   }])
   Menu.setApplicationMenu(menu);
@@ -81,47 +75,3 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-function openFolder(extension) {
-  dialog.showOpenDialog()
-files = dialog.showOpenDialog(mainWindow, {
-  properties: ['openFile'],
-  filters: [{name: 'dirClean', extensions: [extension]}]
- });
-
- if (!files) return
-
-
- removeFiles(files);
-
-}
-
-
-
-
-function openFiles(){
-  fs.open(files[0],'r', (err, fd) => {
-    if (err) {
-      if (err.code === 'ENOENT') {
-        console.error('myfile does not exist');
-        return;
-      }
-      throw err;
-    }
-    console.log(fd);
-  });
-}
-
-function removeFiles(files) {
-  if(!files) return
-console.log(files)
-  try {
-    files.forEach(file => {
-      fs.unlink(file, (err) => {
-        if (err){return}
-      })})
-
-  } catch(err) {
-    return
-  }
-}
