@@ -1,13 +1,12 @@
 {
   "name": "dirclean",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A custom application to remove all files from a directory and sub-directories",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . CleanDir --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"DirClean\"",    
-    "package-linux": "electron-packager . CleanDir --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+    "dist:windows": "electron-builder --windows",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/ncruz034/dirclean.git",
   "keywords": [
@@ -18,12 +17,22 @@
     "demo"
   ],
   "author": "Nelson Cruz",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^7.1.2",
+    "electron-builder": "^21.2.0",
     "electron-packager": "^14.1.1"
   },
   "dependencies": {
     "find-remove": "^2.0.0"
+  },
+  "build": {
+    "appId": "com.dirclean.app",
+    "productName": "Directory Cleaner",
+    "target": "NSIS",
+    "nsis":{
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
 }
